@@ -102,6 +102,27 @@ class YoutubeFetcher:
         """
         self.response = {}
 
+    @staticmethod
+    def _remove_duplicates(input_file, output_file):
+        """
+        Remove duplicate lines from an input file and save unique lines to an output file.
+
+        Args:
+            input_file (str): Path to the input file.
+            output_file (str): Path to the output file where unique lines will be saved.
+        """
+        lines_seen = set()
+        try:
+            with open(output_file, 'w') as out_file:
+                with open(input_file, 'r') as in_file:
+                    for line in in_file:
+                        if line not in lines_seen:
+                            out_file.write(line)
+                            lines_seen.add(line)
+        except FileNotFoundError:
+            print("File not found. Please check the file path.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 # # Run
 # clientYoutube = YoutubeFetcher(api_key=os.getenv('YOUTUBE_API_KEY'))
