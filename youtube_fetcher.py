@@ -16,13 +16,15 @@ class YoutubeFetcher:
         self.client_youtube = build('youtube', 'v3', developerKey=api_key)
         self.response = {}
 
-    def search_video(self, query, duration='any', lang=None, max_results=50, page_token=None, save_next_page_token=True):
+    def search_video(self, query, duration='any', lang=None, max_results=50, page_token=None,
+                     save_next_page_token=True):
         """
         Search for videos.
 
         Args:
             query (str): The search query.
-            duration (str, optional): The video duration (e.g., 'any', 'long'(>20min), 'medium'(4-20min), 'short'(<4min)).
+            duration (str, optional): The video duration
+                (e.g., 'any', 'long'(>20min), 'medium'(4-20min), 'short'(<4min)).
             lang (str, optional): The language of the videos, e.g. 'en'.
             max_results (int, optional): Maximum number of results to fetch per request. Allowed values [0, 50].
             page_token (str, optional): Token for pagination. Defaults to None.
