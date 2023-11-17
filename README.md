@@ -7,7 +7,7 @@ This Python class, `YoutubeFetcher`, allows users to interact with the YouTube D
 1. Clone the repository.
 2. Install the required dependencies: `pip install -r requirements.txt`
 3. To use this class, you'll need a YouTube Data API key. You can obtain it by following the instructions in the [YouTube API documentation](https://developers.google.com/youtube/v3/getting-started).
-
+The quota is [100 search queries per day](https://developers.google.com/youtube/v3/determine_quota_cost). 
 
 ## Usage
 
