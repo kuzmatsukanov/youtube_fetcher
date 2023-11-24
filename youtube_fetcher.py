@@ -116,16 +116,16 @@ class YoutubeFetcher:
         """
         lines_seen = set()
         try:
-            with open(output_file, 'w') as out_file:
-                with open(input_file, 'r') as in_file:
-                    for line in in_file:
-                        if line not in lines_seen:
-                            out_file.write(line)
-                            lines_seen.add(line)
+            # Read the CSV file into a DataFrame
+            df = pd.read_csv(input_file)
+
+            # Drop duplicate rows based on all columns
+            df_unique = df.drop_duplicates()
+
+            # Save the unique DataFrame to a new CSV file
+            df_unique.to_csv(output_file, index=False)
         except FileNotFoundError:
-            print("File not found. Please check the file path.")
-        except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"File '{input_file}' not found. Please provide a valid file path.")
 
     @staticmethod
     def _filter_by_word(input_file, output_file, keywords):
@@ -159,5 +159,5 @@ class YoutubeFetcher:
 # for i in range(3):
 #     clientYoutube.search_video(query='аудиокнига мураками', duration='long', lang='ru', max_results=50)
 #     clientYoutube.save_to_csv('audiobooks.csv')
-# clientYoutube._remove_duplicates('audiobooks.csv', 'audiobooks_clean.csv')
+# clientYoutube._remove_duplicates('audiobooks.csv', 'audiobooks.csv')
 # clientYoutube._filter_by_word('audiobooks.csv', 'audiobooks_filter.csv', ('аудиокниг', 'радиоспектакл'))
