@@ -1,5 +1,6 @@
 import os
 import csv
+import pandas as pd
 from googleapiclient.discovery import build
 from dotenv import load_dotenv
 load_dotenv()
@@ -126,7 +127,37 @@ class YoutubeFetcher:
         except Exception as e:
             print(f"An error occurred: {e}")
 
+    @staticmethod
+    def _filter_by_word(input_file, output_file, keywords):
+        """
+        Filter a CSV file based on specified keywords in either the 'title' and 'description' columns (case-insensitive).
+        The filtered data is saved to a new CSV file.
+
+        Args:
+            input_file (str): Path to the input CSV file.
+            output_file (str): Path to save the filtered data as a new CSV file.
+            keywords (list): List of words to filter by.
+        """
+        try:
+            # Read the CSV file into a DataFrame
+            df = pd.read_csv(input_file)
+
+            # Filter rows that contain any of the specified keywords in either of the two columns (case-insensitive)
+            filter_condition = (
+                    df['title'].str.contains('|'.join(keywords), case=False) |
+                    df['description'].str.contains('|'.join(keywords), case=False)
+            )
+            df_filtered = df[filter_condition]
+
+            # Save the filtered DataFrame to a new CSV file
+            df_filtered.to_csv(output_file, index=False)
+        except FileNotFoundError:
+            print(f"File '{input_file}' not found. Please provide a valid file path.")
+
 # # Run
 # clientYoutube = YoutubeFetcher(api_key=os.getenv('YOUTUBE_API_KEY'))
-# clientYoutube.search_video(query='Аудиокнига', duration='long', lang='ru', max_results=50)
-# clientYoutube.save_to_csv('audiobooks.csv')
+# for i in range(3):
+#     clientYoutube.search_video(query='аудиокнига мураками', duration='long', lang='ru', max_results=50)
+#     clientYoutube.save_to_csv('audiobooks.csv')
+# clientYoutube._remove_duplicates('audiobooks.csv', 'audiobooks_clean.csv')
+# clientYoutube._filter_by_word('audiobooks.csv', 'audiobooks_filter.csv', ('аудиокниг', 'радиоспектакл'))
