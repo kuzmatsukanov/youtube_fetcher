@@ -114,7 +114,6 @@ class YoutubeFetcher:
             input_file (str): Path to the input file.
             output_file (str): Path to the output file where unique lines will be saved.
         """
-        lines_seen = set()
         try:
             # Read the CSV file into a DataFrame
             df = pd.read_csv(input_file)
@@ -136,7 +135,7 @@ class YoutubeFetcher:
         Args:
             input_file (str): Path to the input CSV file.
             output_file (str): Path to save the filtered data as a new CSV file.
-            keywords (list): List of words to filter by.
+            keywords (iterable): List of words to filter by.
         """
         try:
             # Read the CSV file into a DataFrame
@@ -154,10 +153,10 @@ class YoutubeFetcher:
         except FileNotFoundError:
             print(f"File '{input_file}' not found. Please provide a valid file path.")
 
-# # Run
-# clientYoutube = YoutubeFetcher(api_key=os.getenv('YOUTUBE_API_KEY'))
-# for i in range(3):
-#     clientYoutube.search_video(query='аудиокнига мураками', duration='long', lang='ru', max_results=50)
-#     clientYoutube.save_to_csv('audiobooks.csv')
-# clientYoutube._remove_duplicates('audiobooks.csv', 'audiobooks.csv')
-# clientYoutube._filter_by_word('audiobooks.csv', 'audiobooks_filter.csv', ('аудиокниг', 'радиоспектакл'))
+    def run_audiobook(self, query, max_pages=3):
+        """Run search, save, and filtration for audiobooks"""
+        for i in range(max_pages):
+            self.search_video(query=query, duration='long', lang='ru', max_results=50)
+            self.save_to_csv('audiobooks.csv')
+        self._remove_duplicates('audiobooks.csv', 'audiobooks.csv')
+        self._filter_by_word('audiobooks.csv', 'audiobooks.csv', ('аудиокниг', 'радиоспектакл'))
