@@ -1,6 +1,7 @@
 import os
 import csv
 import pandas as pd
+import argparse
 from googleapiclient.discovery import build
 from dotenv import load_dotenv
 load_dotenv()
@@ -160,3 +161,13 @@ class YoutubeFetcher:
             self.save_to_csv('audiobooks.csv')
         self._remove_duplicates('audiobooks.csv', 'audiobooks.csv')
         self._filter_by_word('audiobooks.csv', 'audiobooks.csv', ('аудиокниг', 'радиоспектакл'))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Run audiobook search')
+    parser.add_argument('query', help='Query for audiobook search')
+
+    args = parser.parse_args()
+
+    client_youtube = YoutubeFetcher(api_key=os.getenv('YOUTUBE_API_KEY'))
+    client_youtube.run_audiobook(query=args.query)  # e.g.: python youtube_fetcher.py "аудиокнига лондон"
